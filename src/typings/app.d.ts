@@ -1046,6 +1046,19 @@ declare namespace App {
       total?: number;
     };
 
+    /** The backend service response data */
+    type XcomResponse<T = unknown> = {
+      /** The backend service response code */
+      success: boolean;
+      /** The backend service response code */
+      code: number;
+      /** The backend service response message */
+      message: string;
+      /** The backend service response data */
+      data: T;
+      rows?: any[];
+    };
+
     /** The demo backend service response data */
     type DemoResponse<T = unknown> = {
       /** The backend service response code */

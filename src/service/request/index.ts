@@ -1,5 +1,6 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { BACKEND_ERROR_CODE, REQUEST_CANCELED_CODE, createFlatRequest } from '@sa/axios';
+import { MD5, nanoid } from '@sa/utils';
 import { useAuthStore } from '@/store/modules/auth';
 import { localStg, sessionStg } from '@/utils/storage';
 import { getServiceBaseURL } from '@/utils/service';
@@ -12,7 +13,7 @@ const encryptHeader = import.meta.env.VITE_HEADER_FLAG || 'encrypt-key';
 const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
 const { baseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
 
-export const request = createFlatRequest<App.Service.Response, RequestInstanceState>(
+export const request = createFlatRequest<App.Service.XcomResponse, RequestInstanceState>(
   {
     baseURL,
     'axios-retry': {
@@ -25,10 +26,17 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
       // set token
       const token = localStg.get('token');
       if (token && !isToken) {
-        const Authorization = getAuthorization();
-        Object.assign(config.headers, { Authorization });
+        Object.assign(config.headers, { 'X-Access-Token': token });
       }
 
+      const nonceStr = nanoid();
+      Object.assign(config.headers, { 'X-NonceStr': nonceStr });
+      const timestamp = Date.now();
+      Object.assign(config.headers, { 'X-Timestamp': timestamp });
+      const sign = MD5.encrypt(
+        import.meta.env.VITE_REQUEST_SECRET + nonceStr + timestamp + import.meta.env.VITE_REQUEST_SECRET
+      );
+      Object.assign(config.headers, { 'X-Signature': sign });
       // 客户端 ID
       config.headers.Clientid = import.meta.env.VITE_APP_CLIENT_ID;
       // 对应国际化资源文件后缀
@@ -36,7 +44,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
 
       handleRepeatSubmit(config);
 
-      handleEncrypt(config);
+      // handleEncrypt(config);
 
       // FormData数据去请求头Content-Type
       if (config.data instanceof FormData) {
@@ -48,15 +56,16 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
     isBackendSuccess(response) {
       // when the backend response code is "0000"(default), it means the request is success
       // to change this logic by yourself, you can modify the `VITE_SERVICE_SUCCESS_CODE` in `.env` file
-      if (import.meta.env.VITE_APP_ENCRYPT === 'Y' && response.headers[encryptHeader]) {
-        const keyStr = response.headers[encryptHeader];
-        const data = String(response.data);
-        const base64Str = decrypt(keyStr);
-        const aesKey = decryptBase64(base64Str.toString());
-        const decryptData = decryptWithAes(data, aesKey);
-        response.data = JSON.parse(decryptData);
-      }
-      return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
+      // if (import.meta.env.VITE_APP_ENCRYPT === 'Y' && response.headers[encryptHeader]) {
+      //   const keyStr = response.headers[encryptHeader];
+      //   const data = String(response.data);
+      //   const base64Str = decrypt(keyStr);
+      //   const aesKey = decryptBase64(base64Str.toString());
+      //   const decryptData = decryptWithAes(data, aesKey);
+      //   response.data = JSON.parse(decryptData);
+      // }
+      // return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
+      return response.data.success;
     },
     async onBackendFail(response, instance) {
       const authStore = useAuthStore();
@@ -70,7 +79,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
         handleLogout();
         window.removeEventListener('beforeunload', handleLogout);
 
-        request.state.errMsgStack = request.state.errMsgStack.filter(msg => msg !== response.data.msg);
+        request.state.errMsgStack = request.state.errMsgStack.filter(msg => msg !== response.data.message);
       }
 
       const isLogin = Boolean(localStg.get('token'));
@@ -85,7 +94,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
       // when the backend response code is in `modalLogoutCodes`, it means the user will be logged out by displaying a modal
       const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
       if (modalLogoutCodes.includes(responseCode) && isLogin) {
-        const isExist = request.state.errMsgStack?.includes(response.data.msg);
+        const isExist = request.state.errMsgStack?.includes(response.data.message);
         if (isExist) {
           return null;
         }
@@ -94,7 +103,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
           return null;
         }
 
-        request.state.errMsgStack = [...(request.state.errMsgStack || []), response.data.msg];
+        request.state.errMsgStack = [...(request.state.errMsgStack || []), response.data.message];
 
         window.$dialog?.warning({
           title: '系统提示',
@@ -157,7 +166,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
 
       // get backend error message and code
       if (error.code === BACKEND_ERROR_CODE) {
-        message = error.response?.data?.msg || message;
+        message = error.response?.data?.message || message;
         backendErrorCode = String(error.response?.data?.code || '');
       }
 

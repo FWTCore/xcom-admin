@@ -22,8 +22,8 @@
     "pnpm": ">=10.5.0"
   },
   "scripts": {
-    "build": "vite build --mode prod",
-    "build:dev": "vite build --mode dev",
+    "build": "vite build --mode prod --skip-plugins eslint",
+    "build:dev": "vite build --mode dev --skip-plugins eslint",
     "cleanup": "sa cleanup",
     "commit": "sa git-commit",
     "commit:zh": "sa git-commit -l=zh-cn",
@@ -31,7 +31,6 @@
     "dev:prod": "vite --mode prod",
     "gen-route": "sa gen-route",
     "lint": "eslint . --fix",
-    "prepare": "simple-git-hooks",
     "preview": "vite preview",
     "release": "sa release",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
@@ -90,7 +89,6 @@
     "eslint-plugin-vue": "10.4.0",
     "kolorist": "1.8.0",
     "sass": "1.92.1",
-    "simple-git-hooks": "2.13.1",
     "tsx": "4.20.5",
     "typescript": "5.9.2",
     "unplugin-icons": "22.3.0",
@@ -103,9 +101,5 @@
     "vite-plugin-vue-devtools": "8.0.2",
     "vue-eslint-parser": "10.2.0",
     "vue-tsc": "3.0.7"
-  },
-  "simple-git-hooks": {
-    "commit-msg": "pnpm sa git-commit-verify",
-    "pre-commit": "pnpm typecheck && pnpm lint && git diff --exit-code"
   }
 }

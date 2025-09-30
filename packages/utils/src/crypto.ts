@@ -25,3 +25,17 @@ export class Crypto<T extends object> {
     }
   }
 }
+
+/**
+ * MD5 哈希工具类
+ */
+export class MD5 {
+  /**
+   * 计算字符串的 MD5 哈希值
+   * @param data 输入字符串
+   * @returns 32位小写十六进制哈希值
+   */
+  static encrypt(data: string): string {
+    return CryptoJS.MD5(data).toString();
+  }
+}

@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import type { SelectOption } from 'naive-ui';
 import { useLoading } from '@sa/hooks';
+import { MD5 } from '@sa/utils';
 import { fetchCaptchaCode, fetchTenantList } from '@/service/api';
 import { fetchSocialAuthBinding } from '@/service/api/system';
 import { useAuthStore } from '@/store/modules/auth';
@@ -64,7 +65,7 @@ async function handleFetchTenantList() {
   endTenantLoading();
 }
 
-handleFetchTenantList();
+// handleFetchTenantList();
 
 async function handleSubmit() {
   await validate();
@@ -77,9 +78,12 @@ async function handleSubmit() {
     localStg.remove('loginRember');
   }
   try {
+    model.password = MD5.encrypt(
+      import.meta.env.VITE_REQUEST_SECRET + model.password + import.meta.env.VITE_REQUEST_SECRET
+    );
     await authStore.login(model);
   } catch {
-    handleFetchCaptchaCode();
+    // handleFetchCaptchaCode();
   }
 }
 
@@ -96,7 +100,7 @@ async function handleFetchCaptchaCode() {
   endCodeLoading();
 }
 
-handleFetchCaptchaCode();
+// handleFetchCaptchaCode();
 
 function handleLoginRember() {
   const loginRember = localStg.get('loginRember');
@@ -124,7 +128,6 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
 
 <template>
   <div>
-    <div class="mb-5px text-32px text-black font-600 dark:text-white">登录到您的账户</div>
     <div class="pb-18px text-16px text-#858585">欢迎回来！请输入您的账户信息</div>
     <NForm
       ref="formRef"
@@ -134,14 +137,16 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
       :show-label="false"
       @keyup.enter="() => !authStore.loginLoading && handleSubmit()"
     >
-      <NFormItem v-if="tenantEnabled" path="tenantId">
+      <!--
+ <NFormItem v-if="tenantEnabled" path="tenantId">
         <NSelect
           v-model:value="model.tenantId"
           placeholder="请选择租户"
           :options="tenantOption"
           :loading="tenantLoading"
         />
-      </NFormItem>
+      </NFormItem> 
+-->
       <NFormItem path="username">
         <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')" />
       </NFormItem>
@@ -153,7 +158,8 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
           :placeholder="$t('page.login.common.passwordPlaceholder')"
         />
       </NFormItem>
-      <NFormItem v-if="captchaEnabled" path="code">
+      <!--
+ <NFormItem v-if="captchaEnabled" path="code">
         <div class="w-full flex-y-center gap-16px">
           <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
           <NSpin :show="codeLoading" :size="28" class="h-42px">
@@ -163,13 +169,16 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
             </NButton>
           </NSpin>
         </div>
-      </NFormItem>
+      </NFormItem> 
+-->
       <NSpace vertical :size="12" class="mb-8px">
         <div class="mx-6px mb-8px flex-y-center justify-between">
           <NCheckbox v-model:checked="remberMe" size="large">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
-          <NA type="primary" class="text-18px" @click="toggleLoginModule('reset-pwd')">
+          <!--
+ <NA type="primary" class="text-18px" @click="toggleLoginModule('reset-pwd')">
             {{ $t('page.login.pwdLogin.forgetPassword') }}
-          </NA>
+          </NA> 
+-->
         </div>
         <NButton type="primary" size="large" block :loading="authStore.loginLoading" @click="handleSubmit">
           {{ $t('common.login') }}
@@ -179,12 +188,14 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
         </NButton>
       </NSpace>
     </NForm>
-
+    <!-- 
     <NDivider>
       <div class="color-#858585">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</div>
-    </NDivider>
+    </NDivider> 
+-->
 
-    <div class="w-full flex-y-center gap-16px">
+    <!--
+ <div class="w-full flex-y-center gap-16px">
       <NButton class="flex-1" @click="handleSocialLogin('gitee')">
         <template #icon>
           <icon-simple-icons:gitee class="color-#c71d23" />
@@ -197,14 +208,17 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
         </template>
         <span class="ml-6px">GitHub</span>
       </NButton>
-    </div>
+    </div> 
+-->
 
-    <div class="mt-24px w-full text-center text-18px text-#858585">
+    <!--
+ <div class="mt-24px w-full text-center text-18px text-#858585">
       您还没有账户？
       <NA type="primary" class="text-18px" @click="toggleLoginModule('register')">
         {{ $t('page.login.common.register') }}
       </NA>
-    </div>
+    </div> 
+-->
   </div>
 </template>
 
