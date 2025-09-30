@@ -574,7 +574,7 @@ declare namespace Api {
         | 'accountCount'
         | 'status'
       > & {
-        username: string;
+        userName: string;
         password: string;
       }
     >;

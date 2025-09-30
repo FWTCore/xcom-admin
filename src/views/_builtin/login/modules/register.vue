@@ -23,21 +23,21 @@ const tenantOption = ref<SelectOption[]>([]);
 
 const model: Api.Auth.RegisterForm = reactive({
   tenantId: '000000',
-  username: '',
+  userName: '',
   code: '',
   password: '',
   confirmPassword: '',
   userType: 'sys_user'
 });
 
-type RuleKey = Extract<keyof Api.Auth.RegisterForm, 'username' | 'password' | 'confirmPassword' | 'code' | 'tenantId'>;
+type RuleKey = Extract<keyof Api.Auth.RegisterForm, 'userName' | 'password' | 'confirmPassword' | 'code' | 'tenantId'>;
 
 const rules = computed<Record<RuleKey, App.Global.FormRule[]>>(() => {
   const { formRules, createConfirmPwdRule, createRequiredRule } = useFormRules();
 
   return {
     tenantId: tenantEnabled.value ? formRules.tenantId : [],
-    username: [...formRules.userName, { required: true }],
+    userName: [...formRules.userName, { required: true }],
     password: [...formRules.pwd, { required: true }],
     confirmPassword: createConfirmPwdRule(model.password!),
     code: captchaEnabled.value ? [createRequiredRule($t('form.code.required'))] : []
@@ -50,7 +50,7 @@ async function handleSubmit() {
     startRegisterLoading();
     const { error } = await fetchRegister({
       tenantId: model.tenantId,
-      username: model.username,
+      userName: model.userName,
       password: model.password,
       code: model.code,
       uuid: model.uuid,
@@ -117,8 +117,8 @@ handleFetchCaptchaCode();
       <NFormItem v-if="tenantEnabled" path="tenantId">
         <NSelect v-model:value="model.tenantId" :options="tenantOption" :enabled="tenantEnabled" />
       </NFormItem>
-      <NFormItem path="username">
-        <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')" />
+      <NFormItem path="userName">
+        <NInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
       </NFormItem>
       <NFormItem path="password">
         <NInput

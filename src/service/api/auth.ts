@@ -19,12 +19,12 @@ export function fetchCaptchaCode() {
 /**
  * Login
  *
- * @param username User name
+ * @param userName User name
  * @param password Password
  */
 export function fetchLogin(data: Api.Auth.PwdLoginForm) {
   return request<Api.Auth.LoginToken>({
-    url: '/auth/login',
+    url: '/infra/system/account/login',
     method: 'post',
     headers: {
       isToken: false,

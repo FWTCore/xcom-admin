@@ -217,8 +217,8 @@ async function handleCleanLoginInfor() {
   });
 }
 
-async function handleUnlockLoginInfor(username: string) {
-  const { error } = await fetchUnlockLoginInfor(username);
+async function handleUnlockLoginInfor(userName: string) {
+  const { error } = await fetchUnlockLoginInfor(userName);
   if (error) return;
   window.$message?.success('解锁成功');
   await getDataByPage();

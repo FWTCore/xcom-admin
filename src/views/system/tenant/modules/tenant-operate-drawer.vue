@@ -59,14 +59,14 @@ function createDefaultModel(): Model {
     expireTime: null,
     accountCount: null,
     status: '0',
-    username: '',
+    userName: '',
     password: ''
   };
 }
 
 type RuleKey = Extract<
   keyof Model,
-  'id' | 'contactUserName' | 'contactPhone' | 'companyName' | 'packageId' | 'accountCount' | 'username' | 'password'
+  'id' | 'contactUserName' | 'contactPhone' | 'companyName' | 'packageId' | 'accountCount' | 'userName' | 'password'
 >;
 
 const rules: Record<RuleKey, App.Global.FormRule | App.Global.FormRule[]> = {
@@ -76,7 +76,7 @@ const rules: Record<RuleKey, App.Global.FormRule | App.Global.FormRule[]> = {
   companyName: createRequiredRule('企业名称不能为空'),
   packageId: createRequiredRule('租户套餐不能为空'),
   accountCount: createRequiredRule('用户数量不能为空'),
-  username: [
+  userName: [
     createRequiredRule('管理员账号不能为空'),
     {
       min: 2,
@@ -141,14 +141,14 @@ async function handleSubmit() {
       expireTime,
       accountCount,
       status,
-      username,
+      userName,
       password
     } = model;
     const { error } = await fetchCreateTenant({
       contactUserName,
       contactPhone,
       companyName,
-      username,
+      userName,
       password,
       licenseNumber,
       address,
@@ -229,8 +229,8 @@ watch(visible, () => {
         </NFormItem>
         <div v-if="props.operateType === 'add'">
           <NDivider>管理员信息</NDivider>
-          <NFormItem label="管理员账号" path="username">
-            <NInput v-model:value="model.username" placeholder="请输入管理员账号" />
+          <NFormItem label="管理员账号" path="userName">
+            <NInput v-model:value="model.userName" placeholder="请输入管理员账号" />
           </NFormItem>
           <NFormItem label="管理员密码" path="password">
             <NInput

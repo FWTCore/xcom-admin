@@ -109,7 +109,7 @@ declare namespace Api {
     /** password login form */
     interface PwdLoginForm extends LoginForm {
       /** 用户名 */
-      username?: string;
+      userName?: string;
       /** 密码 */
       password?: string;
     }
@@ -127,7 +127,7 @@ declare namespace Api {
     /** register form */
     interface RegisterForm extends LoginForm {
       /** 用户名 */
-      username?: string;
+      userName?: string;
       /** 密码 */
       password?: string;
       /** 确认密码 */
@@ -139,10 +139,10 @@ declare namespace Api {
     /** login token data */
     interface LoginToken {
       /** 授权令牌 */
-      access_token?: string;
+      token?: string;
       /** 应用id */
       client_id?: string;
-      /** 授权令牌 access_token 的有效期 */
+      /** 授权令牌 token 的有效期 */
       expire_in?: number;
       /** 用户 openid */
       openid?: string;

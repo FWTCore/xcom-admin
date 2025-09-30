@@ -18,9 +18,9 @@ export function fetchBatchDeleteLoginInfor(infoIds: CommonType.IdType[]) {
 }
 
 /** 解锁系统访问记录 */
-export function fetchUnlockLoginInfor(username: string) {
+export function fetchUnlockLoginInfor(userName: string) {
   return request<boolean>({
-    url: `/monitor/logininfor/unlock/${username}`,
+    url: `/monitor/logininfor/unlock/${userName}`,
     method: 'get'
   });
 }

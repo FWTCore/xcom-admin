@@ -31,17 +31,17 @@ const tenantOption = ref<SelectOption[]>([]);
 
 const model: Api.Auth.PwdLoginForm = reactive({
   tenantId: '000000',
-  username: 'admin',
+  userName: 'admin',
   password: 'admin123'
 });
-type RuleKey = Extract<keyof Api.Auth.PwdLoginForm, 'username' | 'password' | 'code' | 'tenantId'>;
+type RuleKey = Extract<keyof Api.Auth.PwdLoginForm, 'userName' | 'password' | 'code' | 'tenantId'>;
 
 const rules = computed<Record<RuleKey, App.Global.FormRule[]>>(() => {
   // inside computed to make locale reactive, if not apply i18n, you can define it without computed
   const { formRules, createRequiredRule } = useFormRules();
 
   const loginRules: Record<RuleKey, App.Global.FormRule[]> = {
-    username: [...formRules.userName, { required: true }],
+    userName: [...formRules.userName, { required: true }],
     password: [createRequiredRule($t('form.pwd.required'))],
     code: captchaEnabled.value ? [createRequiredRule($t('form.code.required'))] : [],
     tenantId: tenantEnabled.value ? formRules.tenantId : []
@@ -71,17 +71,20 @@ async function handleSubmit() {
   await validate();
   // 勾选了需要记住密码设置在 localStorage 中设置记住用户名和密码
   if (remberMe.value) {
-    const { tenantId, username, password } = model;
-    localStg.set('loginRember', { tenantId, username, password });
+    const { tenantId, userName, password } = model;
+    localStg.set('loginRember', { tenantId, userName, password });
   } else {
     // 否则移除
     localStg.remove('loginRember');
   }
   try {
-    model.password = MD5.encrypt(
+    const loginData: Api.Auth.PwdLoginForm = {
+      ...model
+    };
+    loginData.password = MD5.encrypt(
       import.meta.env.VITE_REQUEST_SECRET + model.password + import.meta.env.VITE_REQUEST_SECRET
     );
-    await authStore.login(model);
+    await authStore.login(loginData);
   } catch {
     // handleFetchCaptchaCode();
   }
@@ -147,8 +150,8 @@ async function handleSocialLogin(type: Api.System.SocialSource) {
         />
       </NFormItem> 
 -->
-      <NFormItem path="username">
-        <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')" />
+      <NFormItem path="userName">
+        <NInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
       </NFormItem>
       <NFormItem path="password">
         <NInput
