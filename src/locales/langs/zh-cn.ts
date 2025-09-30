@@ -1066,12 +1066,12 @@ const local: App.I18n.Schema = {
         userName: '用户名称',
         nickName: '用户昵称',
         deptName: '部门',
-        phonenumber: '手机号码',
+        mobilePhone: '手机号码',
         status: '状态',
         createTime: '创建时间',
         password: '密码',
         confirmPassword: '确认密码',
-        sex: '性别',
+        gender: '性别',
         roleIds: '角色',
         postIds: '岗位',
         email: '邮箱',
@@ -1090,7 +1090,7 @@ const local: App.I18n.Schema = {
             required: '请选择部门',
             invalid: '部门不能为空'
           },
-          phonenumber: {
+          mobilePhone: {
             required: '请输入手机号码',
             invalid: '手机号码不能为空'
           },
@@ -1106,7 +1106,7 @@ const local: App.I18n.Schema = {
             required: '请输入确认密码',
             invalid: '确认密码不能为空'
           },
-          sex: {
+          gender: {
             required: '请选择性别',
             invalid: '性别不能为空'
           },

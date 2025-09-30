@@ -94,7 +94,7 @@ declare namespace Api {
     type User = Common.CommonTenantRecord<{
       /** 用户ID */
       userId: CommonType.IdType;
-      /** 部门ID */
+      /** 部门ID  */
       deptId: CommonType.IdType;
       /** 部门名称 */
       deptName: string;
@@ -107,9 +107,9 @@ declare namespace Api {
       /** 用户邮箱 */
       email: string;
       /** 手机号码 */
-      phonenumber: string;
-      /** 用户性别（0男 1女 2未知） */
-      sex: string;
+      mobilePhone: string;
+      /** 用户性别（0女 1男 2其他） */
+      gender: string;
       /** 头像地址 */
       avatar: string;
       /** 密码 */
@@ -119,14 +119,22 @@ declare namespace Api {
       /** 最后登录IP */
       loginIp: string;
       /** 最后登录时间 */
-      loginDate: Date;
+      lastLoginTime: Date;
+      /** 系统公司id  */
+      companyId: CommonType.IdType;
+      /** 部门名称 */
+      companyName: string;
+      companyType: number;
+      companyTypeDesc: string;
+      /** 是否超管 */
+      hasSupAdmin: boolean;
       /** 备注 */
-      remark?: string;
+      remark: string;
     }>;
 
     /** user search params */
     type UserSearchParams = CommonType.RecordNullable<
-      Pick<User, 'deptId' | 'userName' | 'nickName' | 'phonenumber' | 'status'> & {
+      Pick<User, 'deptId' | 'userName' | 'nickName' | 'mobilePhone' | 'status'> & {
         roleId: CommonType.IdType;
       } & Common.CommonSearchParams
     >;
@@ -140,8 +148,8 @@ declare namespace Api {
         | 'userName'
         | 'nickName'
         | 'email'
-        | 'phonenumber'
-        | 'sex'
+        | 'mobilePhone'
+        | 'gender'
         | 'password'
         | 'status'
         | 'remark'
@@ -149,7 +157,9 @@ declare namespace Api {
     >;
 
     /** user profile operate params */
-    type UserProfileOperateParams = CommonType.RecordNullable<Pick<User, 'nickName' | 'email' | 'phonenumber' | 'sex'>>;
+    type UserProfileOperateParams = CommonType.RecordNullable<
+      Pick<User, 'nickName' | 'email' | 'mobilePhone' | 'gender'>
+    >;
 
     /** user password operate params */
     type UserPasswordOperateParams = CommonType.RecordNullable<{

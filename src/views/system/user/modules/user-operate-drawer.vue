@@ -57,8 +57,8 @@ function createDefaultModel(): Model {
     userName: '',
     nickName: '',
     email: '',
-    phonenumber: '',
-    sex: '0',
+    mobilePhone: '',
+    gender: '0',
     password: '',
     status: '0',
     roleIds: [],
@@ -67,13 +67,13 @@ function createDefaultModel(): Model {
   };
 }
 
-type RuleKey = Extract<keyof Model, 'userName' | 'nickName' | 'password' | 'status' | 'phonenumber' | 'roleIds'>;
+type RuleKey = Extract<keyof Model, 'userName' | 'nickName' | 'password' | 'status' | 'mobilePhone' | 'roleIds'>;
 
 const rules: Record<RuleKey, App.Global.FormRule[]> = {
   userName: [createRequiredRule($t('page.system.user.form.userName.required'))],
   nickName: [createRequiredRule($t('page.system.user.form.nickName.required'))],
   password: [{ ...patternRules.pwd, required: props.operateType === 'add' }],
-  phonenumber: [patternRules.phone],
+  mobilePhone: [patternRules.phone],
   status: [createRequiredRule($t('page.system.user.form.status.required'))],
   roleIds: [{ ...createRequiredRule('请选择角色'), type: 'array' }]
 };
@@ -116,8 +116,7 @@ function closeDrawer() {
 async function handleSubmit() {
   await validate();
 
-  const { userId, deptId, userName, nickName, email, phonenumber, sex, password, status, roleIds, postIds, remark } =
-    model;
+  const { userId, deptId, userName, nickName, email, mobilePhone, gender, password, status, roleIds, postIds } = model;
 
   // request
   if (props.operateType === 'add') {
@@ -127,12 +126,11 @@ async function handleSubmit() {
       password,
       nickName,
       email,
-      phonenumber,
-      sex,
+      mobilePhone,
+      gender,
       status,
       roleIds,
-      postIds,
-      remark
+      postIds
     });
     if (error) return;
   }
@@ -144,12 +142,11 @@ async function handleSubmit() {
       userName,
       nickName,
       email,
-      phonenumber,
-      sex,
+      mobilePhone,
+      gender,
       status,
       roleIds,
-      postIds,
-      remark
+      postIds
     });
     if (error) return;
   }
@@ -187,8 +184,8 @@ watch(visible, () => {
               :placeholder="$t('page.system.user.form.deptId.required')"
             />
           </NFormItem>
-          <NFormItem :label="$t('page.system.user.phonenumber')" path="phonenumber">
-            <NInput v-model:value="model.phonenumber" :placeholder="$t('page.system.user.form.phonenumber.required')" />
+          <NFormItem :label="$t('page.system.user.mobilePhone')" path="mobilePhone">
+            <NInput v-model:value="model.mobilePhone" :placeholder="$t('page.system.user.form.mobilePhone.required')" />
           </NFormItem>
           <NFormItem :label="$t('page.system.user.email')" path="email">
             <NInput v-model:value="model.email" :placeholder="$t('page.system.user.form.email.required')" />
@@ -205,11 +202,11 @@ watch(visible, () => {
               :placeholder="$t('page.system.user.form.password.required')"
             />
           </NFormItem>
-          <NFormItem :label="$t('page.system.user.sex')" path="sex">
+          <NFormItem :label="$t('page.system.user.gender')" path="gender">
             <DictRadio
-              v-model:value="model.sex"
+              v-model:value="model.gender"
               dict-code="sys_user_sex"
-              :placeholder="$t('page.system.user.form.sex.required')"
+              :placeholder="$t('page.system.user.form.gender.required')"
             />
           </NFormItem>
           <NFormItem :label="$t('page.system.user.postIds')" path="postIds">

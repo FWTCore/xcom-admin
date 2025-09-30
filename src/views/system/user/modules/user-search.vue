@@ -59,13 +59,13 @@ async function search() {
             </NFormItemGi>
             <NFormItemGi
               span="24 s:12 m:6"
-              :label="$t('page.system.user.phonenumber')"
-              path="phonenumber"
+              :label="$t('page.system.user.mobilePhone')"
+              path="mobilePhone"
               class="pr-24px"
             >
               <NInput
-                v-model:value="model.phonenumber"
-                :placeholder="$t('page.system.user.form.phonenumber.required')"
+                v-model:value="model.mobilePhone"
+                :placeholder="$t('page.system.user.form.mobilePhone.required')"
               />
             </NFormItemGi>
             <NFormItemGi span="24 s:12 m:6" :label="$t('page.system.user.status')" path="status" class="pr-24px">

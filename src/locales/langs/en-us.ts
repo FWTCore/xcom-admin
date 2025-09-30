@@ -1068,12 +1068,12 @@ const local: App.I18n.Schema = {
         userName: 'Username',
         nickName: 'Nickname',
         deptName: 'Department',
-        phonenumber: 'Phone Number',
+        mobilePhone: 'Phone Number',
         status: 'Status',
         createTime: 'Create Time',
         password: 'Password',
         confirmPassword: 'Confirm Password',
-        sex: 'Gender',
+        gender: 'Gender',
         roleIds: 'Roles',
         postIds: 'Posts',
         email: 'Email',
@@ -1092,7 +1092,7 @@ const local: App.I18n.Schema = {
             required: 'Please select Department',
             invalid: 'Department cannot be empty'
           },
-          phonenumber: {
+          mobilePhone: {
             required: 'Please enter Phone Number',
             invalid: 'Phone Number cannot be empty'
           },
@@ -1108,7 +1108,7 @@ const local: App.I18n.Schema = {
             required: 'Please enter Confirm Password',
             invalid: 'Confirm Password cannot be empty'
           },
-          sex: {
+          gender: {
             required: 'Please select Gender',
             invalid: 'Gender cannot be empty'
           },

@@ -60,7 +60,7 @@ export function fetchRegister(data: Api.Auth.RegisterForm) {
 
 /** Get user info */
 export function fetchGetUserInfo() {
-  return request<Api.Auth.UserInfo>({ url: '/system/user/getInfo' });
+  return request<Api.Auth.UserInfo>({ url: '/infra/system/account/getUserInfo' });
 }
 
 /** Logout */

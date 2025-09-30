@@ -39,8 +39,8 @@ function createDefaultProfileModel(): ProfileModel {
   return {
     nickName: userInfo.user?.nickName || '',
     email: userInfo.user?.email || '',
-    phonenumber: userInfo.user?.phonenumber || '',
-    sex: userInfo.user?.sex || '0'
+    mobilePhone: userInfo.user?.mobilePhone || '',
+    gender: userInfo.user?.gender || '0'
   };
 }
 
@@ -52,14 +52,14 @@ function createDefaultPasswordModel(): PasswordModel {
   };
 }
 
-type ProfileRuleKey = Extract<keyof ProfileModel, 'nickName' | 'email' | 'phonenumber' | 'sex'>;
+type ProfileRuleKey = Extract<keyof ProfileModel, 'nickName' | 'email' | 'mobilePhone' | 'gender'>;
 type PasswordRuleKey = Extract<keyof PasswordModel, 'oldPassword' | 'newPassword' | 'confirmPassword'>;
 
 const profileRules: Record<ProfileRuleKey, App.Global.FormRule> = {
   nickName: createRequiredRule('昵称不能为空'),
   email: { ...patternRules.email, required: true },
-  phonenumber: { ...patternRules.phone, required: true },
-  sex: createRequiredRule('性别不能为空')
+  mobilePhone: { ...patternRules.phone, required: true },
+  gender: createRequiredRule('性别不能为空')
 };
 
 const passwordRules: Record<PasswordRuleKey, App.Global.FormRule> = {
@@ -116,7 +116,7 @@ async function updatePassword() {
         </div>
         <NDescriptions :column="1" label-placement="left" label-width="120px">
           <NDescriptionsItem label="手机号码">
-            <div class="text-14px">{{ userInfo.user?.phonenumber }}</div>
+            <div class="text-14px">{{ userInfo.user?.mobilePhone }}</div>
           </NDescriptionsItem>
           <NDescriptionsItem label="用户邮箱">
             <div class="text-14px">{{ userInfo.user?.email }}</div>
@@ -156,11 +156,11 @@ async function updatePassword() {
             <NFormItem label="邮箱" path="email">
               <NInput v-model:value="profileModel.email" placeholder="请输入邮箱" />
             </NFormItem>
-            <NFormItem label="手机号" path="phonenumber">
-              <NInput v-model:value="profileModel.phonenumber" placeholder="请输入手机号" />
+            <NFormItem label="手机号" path="mobilePhone">
+              <NInput v-model:value="profileModel.mobilePhone" placeholder="请输入手机号" />
             </NFormItem>
-            <NFormItem label="性别" path="sex">
-              <NRadioGroup v-model:value="profileModel.sex">
+            <NFormItem label="性别" path="gender">
+              <NRadioGroup v-model:value="profileModel.gender">
                 <NRadio value="0">男</NRadio>
                 <NRadio value="1">女</NRadio>
               </NRadioGroup>

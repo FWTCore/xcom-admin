@@ -3,5 +3,5 @@ import { request } from '../request';
 
 /** get routes */
 export function fetchGetRoutes() {
-  return request<ElegantConstRoute[]>({ url: '/system/menu/getRouters' });
+  return request<ElegantConstRoute[]>({ url: '/infra/system/account/getLoginAuth' });
 }

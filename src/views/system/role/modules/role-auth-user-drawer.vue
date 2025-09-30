@@ -52,7 +52,7 @@ const { columns, data, getData, getDataByPage, loading, mobilePagination, search
     deptId: null,
     userName: null,
     nickName: null,
-    phonenumber: null,
+    mobilePhone: null,
     status: null,
     params: {}
   },
@@ -90,7 +90,7 @@ const { columns, data, getData, getDataByPage, loading, mobilePagination, search
       ellipsis: true
     },
     {
-      key: 'phonenumber',
+      key: 'mobilePhone',
       title: '手机号码',
       align: 'center',
       minWidth: 120,
@@ -203,8 +203,8 @@ function reset() {
             <NFormItemGi span="24 s:12 m:8" label="用户昵称" path="nickName" class="pr-24px">
               <NInput v-model:value="searchParams.nickName" placeholder="请输入用户昵称" />
             </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:8" label="手机号码" path="phonenumber" class="pr-24px">
-              <NInput v-model:value="searchParams.phonenumber" placeholder="请输入手机号码" />
+            <NFormItemGi span="24 s:12 m:8" label="手机号码" path="mobilePhone" class="pr-24px">
+              <NInput v-model:value="searchParams.mobilePhone" placeholder="请输入手机号码" />
             </NFormItemGi>
             <NFormItemGi span="24 s:12 m:8" label="所属部门" path="deptId" class="pr-24px">
               <DeptTreeSelect v-model:value="searchParams.deptId" placeholder="请选择部门" />

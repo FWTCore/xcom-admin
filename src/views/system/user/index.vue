@@ -52,7 +52,7 @@ const {
     deptId: null,
     userName: null,
     nickName: null,
-    phonenumber: null,
+    mobilePhone: null,
     status: null,
     params: {}
   },
@@ -89,13 +89,13 @@ const {
       }
     },
     {
-      key: 'sex',
-      title: $t('page.system.user.sex'),
+      key: 'gender',
+      title: $t('page.system.user.gender'),
       align: 'center',
       width: 80,
       ellipsis: true,
       render(row) {
-        return <DictTag value={row.sex} dictCode="sys_user_sex" />;
+        return <DictTag value={row.gender} dictCode="sys_user_sex" />;
       }
     },
     {
@@ -113,8 +113,8 @@ const {
       ellipsis: true
     },
     {
-      key: 'phonenumber',
-      title: $t('page.system.user.phonenumber'),
+      key: 'mobilePhone',
+      title: $t('page.system.user.mobilePhone'),
       align: 'center',
       width: 120,
       ellipsis: true

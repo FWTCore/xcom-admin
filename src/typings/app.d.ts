@@ -922,12 +922,12 @@ declare namespace App {
             userName: string;
             nickName: string;
             deptName: string;
-            phonenumber: string;
+            mobilePhone: string;
             status: string;
             createTime: string;
             password: string;
             confirmPassword: string;
-            sex: string;
+            gender: string;
             roleIds: string;
             postIds: string;
             email: string;
@@ -937,11 +937,11 @@ declare namespace App {
               userName: FormMsg;
               nickName: FormMsg;
               deptId: FormMsg;
-              phonenumber: FormMsg;
+              mobilePhone: FormMsg;
               status: FormMsg;
               password: FormMsg;
               confirmPassword: FormMsg;
-              sex: FormMsg;
+              gender: FormMsg;
               roleIds: FormMsg;
               postIds: FormMsg;
               email: FormMsg;
