@@ -299,6 +299,13 @@ declare namespace Api {
       children: MenuList;
       id?: CommonType.IdType;
       label?: string;
+      routeKey: string;
+      redirect?: string;
+      alias?: string;
+      activeUrlPath?: string;
+      affixTabOrder?: number;
+      releaseFlag?: Boolean;
+      manageFeature?: Boolean;
     }>;
 
     /** menu list */

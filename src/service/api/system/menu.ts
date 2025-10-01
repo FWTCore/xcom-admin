@@ -3,7 +3,7 @@ import { request } from '@/service/request';
 /** 获取菜单列表 */
 export function fetchGetMenuList(params?: Api.System.MenuSearchParams, signal?: AbortSignal) {
   return request<Api.System.MenuList>({
-    url: '/system/menu/list',
+    url: '/infra/system-menu/list',
     method: 'get',
     params,
     signal

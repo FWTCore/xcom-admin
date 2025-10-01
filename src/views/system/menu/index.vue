@@ -53,7 +53,7 @@ const isIframeType = computed(() => currentMenu.value?.isFrame === '2');
 const menuTreeRef = ref<TreeInst>();
 const btnData = ref<Api.System.MenuList>([]);
 
-const getMeunTree = async () => {
+const getMenuTree = async () => {
   startLoading();
   const { data, error } = await fetchGetMenuList();
   if (error) return;
@@ -68,14 +68,14 @@ const getMeunTree = async () => {
   endLoading();
 };
 
-getMeunTree();
+getMenuTree();
 
 async function handleSubmitted(menuType?: Api.System.MenuType) {
   if (menuType === 'F') {
     await getBtnMenuList();
     return;
   }
-  await getMeunTree();
+  await getMenuTree();
   if (operateType.value === 'edit') {
     currentMenu.value = menuTreeRef.value?.getCheckedData().options[0] as Api.System.Menu;
   }
@@ -105,7 +105,7 @@ async function handleDeleteMenu(id?: CommonType.IdType) {
   expandedKeys.value.filter(item => !checkedKeys.value.includes(item));
   currentMenu.value = undefined;
   checkedKeys.value = [];
-  getMeunTree();
+  getMenuTree();
 }
 
 function renderLabel({ option }: { option: TreeOption }) {
@@ -164,7 +164,7 @@ function renderSuffix({ option }: { option: TreeOption }) {
 
 function reset() {
   name.value = undefined;
-  getMeunTree();
+  getMenuTree();
 }
 
 function handleClickTree(option: Array<TreeOption | null>) {
