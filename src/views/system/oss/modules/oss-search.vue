@@ -60,7 +60,7 @@ async function search() {
             <NFormItemGi span="24 s:12 m:6" label="服务商" path="service" class="pr-24px">
               <NInput v-model:value="model.service" placeholder="请输入服务商" />
             </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:12" label="创建时间" path="createTime" class="pr-24px">
+            <NFormItemGi span="24 s:12 m:12" label="创建时间" path="createdTime" class="pr-24px">
               <NDatePicker
                 v-model:formatted-value="dateRangeCreateTime"
                 type="datetimerange"

@@ -3,7 +3,7 @@ import { request } from '@/service/request';
 /** 根据字典类型查询字典数据信息 */
 export function fetchGetDictDataByType(dictType: string) {
   return request<Api.System.DictData[]>({
-    url: `/infra/system-dict/data/type/${dictType}`,
+    url: `/infra/system-dict-item/type/${dictType}`,
     method: 'get'
   });
 }
@@ -11,7 +11,7 @@ export function fetchGetDictDataByType(dictType: string) {
 /** 获取字典选择框列表 */
 export function fetchGetDictTypeOption() {
   return request<Api.System.DictType[]>({
-    url: '/system/dict/type/optionselect',
+    url: '/infra/system-dict/list',
     method: 'get'
   });
 }
@@ -19,8 +19,8 @@ export function fetchGetDictTypeOption() {
 /** 获取字典类型列表 */
 export function fetchGetDictTypeList(params?: Api.System.DictTypeSearchParams) {
   return request<Api.System.DictTypeList>({
-    url: '/system/dict/type/list',
-    method: 'get',
+    url: '/infra/system-dict/page',
+    method: 'post',
     params
   });
 }
@@ -28,7 +28,7 @@ export function fetchGetDictTypeList(params?: Api.System.DictTypeSearchParams) {
 /** 新增字典类型 */
 export function fetchCreateDictType(data: Api.System.DictTypeOperateParams) {
   return request<boolean>({
-    url: '/system/dict/type',
+    url: '/infra/system-dict/upsetData',
     method: 'post',
     data
   });
@@ -37,8 +37,8 @@ export function fetchCreateDictType(data: Api.System.DictTypeOperateParams) {
 /** 修改字典类型 */
 export function fetchUpdateDictType(data: Api.System.DictTypeOperateParams) {
   return request<boolean>({
-    url: '/system/dict/type',
-    method: 'put',
+    url: '/infra/system-dict/upsetData',
+    method: 'post',
     data
   });
 }
@@ -46,14 +46,15 @@ export function fetchUpdateDictType(data: Api.System.DictTypeOperateParams) {
 /** 批量删除字典类型 */
 export function fetchBatchDeleteDictType(dictIds: CommonType.IdType[]) {
   return request<boolean>({
-    url: `/system/dict/type/${dictIds.join(',')}`,
-    method: 'delete'
+    url: `/infra/system-dict/delete`,
+    method: 'post',
+    data: { ids: dictIds }
   });
 }
 /** 刷新缓存 */
 export function fetchRefreshCache() {
   return request<boolean>({
-    url: `/system/dict/type/refreshCache`,
-    method: 'delete'
+    url: `/infra/system-dict/refreshCache`,
+    method: 'get'
   });
 }

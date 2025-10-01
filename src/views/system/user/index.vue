@@ -136,7 +136,7 @@ const {
       }
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: $t('page.system.user.createTime'),
       align: 'center',
       width: 120

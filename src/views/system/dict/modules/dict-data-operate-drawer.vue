@@ -58,21 +58,19 @@ const listClassOptions: Record<string, string>[] = [
 
 function createDefaultModel(): Model {
   return {
-    dictSort: 0,
+    sortIndex: 0,
     dictLabel: '',
     dictValue: '',
     dictType: props.dictType,
     cssClass: '',
     listClass: null,
     remark: '',
-    isDefault: 'N'
   };
 }
 
-type RuleKey = Extract<keyof Model, 'dictCode' | 'dictLabel' | 'dictValue'>;
+type RuleKey = Extract<keyof Model, 'dictLabel' | 'dictValue'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
-  dictCode: createRequiredRule($t('page.system.dict.form.dictCode.invalid')),
   dictLabel: createRequiredRule($t('page.system.dict.form.dictLabel.invalid')),
   dictValue: createRequiredRule($t('page.system.dict.form.dictValue.invalid'))
 };
@@ -97,31 +95,28 @@ async function handleSubmit() {
 
   // request
   if (props.operateType === 'add') {
-    const { dictSort, dictLabel, dictValue, dictType, cssClass, listClass, isDefault, remark } = model;
+    const { sortIndex, dictLabel, dictValue, dictType, cssClass, listClass, remark } = model;
     const { error } = await fetchCreateDictData({
-      dictSort,
+      sortIndex,
       dictLabel,
       dictValue,
       dictType,
       cssClass,
       listClass,
-      isDefault,
       remark
     });
     if (error) return;
   }
 
   if (props.operateType === 'edit') {
-    const { dictCode, dictSort, dictLabel, dictValue, dictType, cssClass, listClass, isDefault, remark } = model;
+    const {  sortIndex, dictLabel, dictValue, dictType, cssClass, listClass, remark } = model;
     const { error } = await fetchUpdateDictData({
-      dictCode,
-      dictSort,
+      sortIndex,
       dictLabel,
       dictValue,
       dictType,
       cssClass,
       listClass,
-      isDefault,
       remark
     });
     if (error) return;
@@ -180,12 +175,12 @@ function renderTagLabel(option: { label: string; value: string }) {
         <NFormItem :label="$t('page.system.dict.data.cssClass')" path="cssClass">
           <NInput v-model:value="model.cssClass" :placeholder="$t('page.system.dict.form.cssClass.required')" />
         </NFormItem>
-        <NFormItem :label="$t('page.system.dict.data.dictSort')" path="dictSort">
-          <NInputNumber v-model:value="model.dictSort" :placeholder="$t('page.system.dict.form.dictSort.required')" />
+        <NFormItem :label="$t('page.system.dict.data.dictSort')" path="sortIndex">
+          <NInputNumber v-model:value="model.sortIndex" :placeholder="$t('page.system.dict.form.dictSort.required')" />
         </NFormItem>
-        <NFormItem :label="$t('page.system.dict.data.isDefault')" path="isDefault">
+        <!-- <NFormItem :label="$t('page.system.dict.data.isDefault')" path="isDefault">
           <DictRadio v-model:value="model.isDefault" dict-code="sys_yes_no" />
-        </NFormItem>
+        </NFormItem> -->
         <NFormItem :label="$t('page.system.dict.data.remark')" path="remark">
           <NInput
             v-model:value="model.remark"

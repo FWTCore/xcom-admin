@@ -108,15 +108,14 @@ export default function useHookTable<A extends ApiFn, T, C>(config: TableConfig<
   }
 
   function formatSearchParams(params: Record<string, unknown>) {
-    const formattedParams: Record<string, unknown> = {};
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        formattedParams[key] = value;
-      }
-    });
-
-    return formattedParams;
+    const { pageNum, pageSize, ...others } = params;
+    const formattedParams = Object.entries(others)
+      .filter(([, value]) => value !== null && value !== undefined)
+      .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, unknown>);
+    return { pageNum, pageSize, param: formattedParams };
   }
 
   /**

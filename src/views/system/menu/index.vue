@@ -264,7 +264,7 @@ const btnColumns: DataTableColumns<Api.System.Menu> = [
   },
   {
     title: $t('page.system.menu.createTime'),
-    key: 'createTime',
+    key: 'createdTime',
     align: 'center',
     minWidth: 150
   },

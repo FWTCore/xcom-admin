@@ -36,7 +36,7 @@ const dictTypeData = ref<Api.System.DictType>();
 const dictOperateType = ref<NaiveUI.TableOperateType>('add');
 const { bool: dictTypeDrawerVisible, setTrue: openDictTypeDrawer } = useBoolean();
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination, searchParams } = useTable({
-  apiFn: fetchGetDictDataList,
+  apiFn: (params?: Api.System.DictDataSearchParams) => fetchGetDictDataList(params), // Modified to send parameters via POST body,
   apiParams: {
     pageNum: 1,
     pageSize: 10,
@@ -45,6 +45,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
     dictLabel: null,
     dictType: null
   },
+  immediate: false,
   columns: () => [
     {
       type: 'selection',
@@ -75,7 +76,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       }
     },
     {
-      key: 'dictSort',
+      key: 'sortIndex',
       title: $t('page.system.dict.data.dictSort'),
       align: 'center',
       minWidth: 80,
@@ -95,7 +96,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       }
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: $t('page.system.dict.data.createTime'),
       align: 'center',
       minWidth: 80,
@@ -127,7 +128,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
               type="primary"
               icon="material-symbols:drive-file-rename-outline-outline"
               tooltipContent={$t('common.edit')}
-              onClick={() => edit(row.dictCode!)}
+              onClick={() => edit(row.id!)}
             />
           );
         };
@@ -143,7 +144,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
               icon="material-symbols:delete-outline"
               tooltipContent={$t('common.delete')}
               popconfirmContent={$t('common.confirmDelete')}
-              onPositiveClick={() => handleDelete(row.dictCode!)}
+              onPositiveClick={() => handleDelete(row.id!)}
             />
           );
         };
@@ -170,15 +171,15 @@ async function handleBatchDelete() {
   onBatchDeleted();
 }
 
-async function handleDelete(dictCode: CommonType.IdType) {
+async function handleDelete(id: CommonType.IdType) {
   // request
-  const { error } = await fetchBatchDeleteDictData([dictCode]);
+  const { error } = await fetchBatchDeleteDictData([id]);
   if (error) return;
   onDeleted();
 }
 
-async function edit(dictCode: CommonType.IdType) {
-  handleEdit('dictCode', dictCode);
+async function edit(id: CommonType.IdType) {
+  handleEdit('id', id);
 }
 
 async function handleExport() {
@@ -245,7 +246,7 @@ function renderLabel({ option }: { option: TreeOption }) {
               {option.dictName} {option.dictType}
             </span>
             {option.remark ? <span>( {option.remark} )</span> : null}
-            <span>{option.createTime}</span>
+            <span>{option.createdTime}</span>
           </div>
         )
       }}
@@ -310,49 +311,22 @@ const selectable = computed(() => {
 <template>
   <TableSiderLayout :sider-title="$t('page.system.dict.dictTypeTitle')">
     <template #header-extra>
-      <ButtonIcon
-        v-if="hasAuth('system:dict:add')"
-        size="small"
-        icon="material-symbols:add-rounded"
-        class="h-18px text-icon"
-        :tooltip-content="$t('page.system.dict.addDictType')"
-        @click.stop="() => handleAddType()"
-      />
-      <ButtonIcon
-        v-if="hasAuth('system:dict:export')"
-        size="small"
-        icon="material-symbols:download-rounded"
-        class="h-18px text-icon"
-        :tooltip-content="$t('page.system.dict.exportDictType')"
-        @click.stop="() => handleExportType()"
-      />
-      <ButtonIcon
-        size="small"
-        icon="material-symbols:refresh-rounded"
-        class="h-18px text-icon"
-        :tooltip-content="$t('page.system.dict.refreshDictType')"
-        @click.stop="() => handleResetTreeData()"
-      />
+      <ButtonIcon v-if="hasAuth('system:dict:add')" size="small" icon="material-symbols:add-rounded"
+        class="h-18px text-icon" :tooltip-content="$t('page.system.dict.addDictType')"
+        @click.stop="() => handleAddType()" />
+      <ButtonIcon v-if="hasAuth('system:dict:export')" size="small" icon="material-symbols:download-rounded"
+        class="h-18px text-icon" :tooltip-content="$t('page.system.dict.exportDictType')"
+        @click.stop="() => handleExportType()" />
+      <ButtonIcon size="small" icon="material-symbols:refresh-rounded" class="h-18px text-icon"
+        :tooltip-content="$t('page.system.dict.refreshDictType')" @click.stop="() => handleResetTreeData()" />
     </template>
     <template #sider>
       <NInput v-model:value="dictPattern" clearable :placeholder="$t('common.keywordSearch')" />
       <NSpin class="dict-tree" :show="treeLoading">
-        <NTree
-          block-node
-          show-line
-          :data="dictData as []"
-          :show-irrelevant-nodes="false"
-          :pattern="dictPattern"
-          :filter="dictFilter"
-          class="infinite-scroll h-full min-h-200px py-3"
-          key-field="dictType"
-          label-field="dictName"
-          virtual-scroll
-          :selectable="selectable"
-          :render-label="renderLabel"
-          :render-suffix="renderSuffix"
-          @update:selected-keys="handleClickTree"
-        >
+        <NTree block-node show-line :data="dictData as []" :show-irrelevant-nodes="false" :pattern="dictPattern"
+          :filter="dictFilter" class="infinite-scroll h-full min-h-200px py-3" key-field="dictType"
+          label-field="dictName" virtual-scroll :selectable="selectable" :render-label="renderLabel"
+          :render-suffix="renderSuffix" @update:selected-keys="handleClickTree">
           <template #empty>
             <NEmpty :description="$t('page.system.dict.dictTypeIsEmpty')" class="h-full min-h-200px justify-center" />
           </template>
@@ -364,19 +338,10 @@ const selectable = computed(() => {
       <TableRowCheckAlert v-model:checked-row-keys="checkedRowKeys" />
       <NCard :title="$t('page.system.dict.title')" :bordered="false" size="small" class="card-wrapper sm:flex-1-hidden">
         <template #header-extra>
-          <TableHeaderOperation
-            v-model:columns="columnChecks"
-            :disabled-delete="checkedRowKeys.length === 0"
-            :disable-add="!searchParams.dictType"
-            :loading="loading"
-            :show-add="hasAuth('system:user:add')"
-            :show-delete="hasAuth('system:user:remove')"
-            :show-export="hasAuth('system:user:export')"
-            @add="handleAdd"
-            @delete="handleBatchDelete"
-            @refresh="getData"
-            @export="handleExport"
-          >
+          <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0"
+            :disable-add="!searchParams.dictType" :loading="loading" :show-add="hasAuth('system:dict:add')"
+            :show-delete="hasAuth('system:dict:remove')" :show-export="hasAuth('system:dict:export')" @add="handleAdd"
+            @delete="handleBatchDelete" @refresh="getData" @export="handleExport">
             <template #prefix>
               <NButton ghost size="small" @click="handleRefreshCache">
                 <template #icon>
@@ -387,32 +352,13 @@ const selectable = computed(() => {
             </template>
           </TableHeaderOperation>
         </template>
-        <NDataTable
-          v-model:checked-row-keys="checkedRowKeys"
-          :columns="columns"
-          :data="data"
-          size="small"
-          :flex-height="!appStore.isMobile"
-          :scroll-x="962"
-          :loading="loading"
-          remote
-          :row-key="row => row.dictCode"
-          :pagination="mobilePagination"
-          class="h-full"
-        />
-        <DictDataOperateDrawer
-          v-model:visible="drawerVisible"
-          :operate-type="operateType"
-          :row-data="editingData"
-          :dict-type="searchParams.dictType || ''"
-          @submitted="getData"
-        />
-        <DictTypeOperateDrawer
-          v-model:visible="dictTypeDrawerVisible"
-          :operate-type="dictOperateType"
-          :row-data="dictTypeData"
-          @submitted="getTreeData"
-        />
+        <NDataTable v-model:checked-row-keys="checkedRowKeys" :columns="columns" :data="data" size="small"
+          :flex-height="!appStore.isMobile" :scroll-x="962" :loading="loading" remote :row-key="row => row.id"
+          :pagination="mobilePagination" class="h-full" />
+        <DictDataOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData"
+          :dict-type="searchParams.dictType || ''" @submitted="getData" />
+        <DictTypeOperateDrawer v-model:visible="dictTypeDrawerVisible" :operate-type="dictOperateType"
+          :row-data="dictTypeData" @submitted="getTreeData" />
       </NCard>
     </div>
   </TableSiderLayout>

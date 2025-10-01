@@ -50,7 +50,7 @@ const {
     fileSuffix: null,
     service: null,
     isAsc: 'desc',
-    orderByColumn: 'createTime',
+    orderByColumn: 'createdTime',
     params: {}
   },
   columns: () => [
@@ -123,7 +123,7 @@ const {
       }
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: '创建时间',
       align: 'center',
       minWidth: 120

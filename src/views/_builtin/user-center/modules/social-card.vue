@@ -77,7 +77,7 @@ function getSocial(key: string) {
                 <div class="text-16px font-medium">
                   {{ getSocial(source.key)?.nickName }}
                 </div>
-                <div class="mt-4px text-12px text-gray-500">绑定时间：{{ getSocial(source.key)?.createTime }}</div>
+                <div class="mt-4px text-12px text-gray-500">绑定时间：{{ getSocial(source.key)?.createdTime }}</div>
               </div>
               <NButton
                 type="error"

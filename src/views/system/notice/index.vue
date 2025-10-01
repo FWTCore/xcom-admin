@@ -77,7 +77,7 @@ const {
       minWidth: 120
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: '创建时间',
       align: 'center',
       minWidth: 120

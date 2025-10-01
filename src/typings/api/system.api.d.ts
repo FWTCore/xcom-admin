@@ -346,6 +346,8 @@ declare namespace Api {
       dictType: string;
       /** 备注 */
       remark: string;
+      /** 备注 */
+      dataStatus: null;
     }>;
 
     /** dict type search params */
@@ -355,7 +357,7 @@ declare namespace Api {
 
     /** dict type operate params */
     type DictTypeOperateParams = CommonType.RecordNullable<
-      Pick<Api.System.DictType, 'dictId' | 'dictName' | 'dictType' | 'remark'>
+      Pick<Api.System.DictType, 'dictId' | 'dictName' | 'dictType' | 'remark'| 'dataStatus'>
     >;
 
     /** dict type list */
@@ -365,22 +367,20 @@ declare namespace Api {
     type DictData = Common.CommonRecord<{
       /** 样式属性（其他样式扩展） */
       cssClass: string;
-      /** 字典编码 */
-      dictCode: CommonType.IdType;
       /** 字典标签 */
       dictLabel: string;
       /** 字典排序 */
-      dictSort: number;
+      sortIndex: number;
       /** 字典类型 */
       dictType: string;
       /** 字典键值 */
       dictValue: string;
-      /** 是否默认（Y是 N否） */
-      isDefault: Common.YesOrNoStatus;
       /** 表格回显样式 */
       listClass: NaiveUI.ThemeColor;
       /** 备注 */
       remark: string;
+      /** 备注 */
+      dataStatus: number;
     }>;
 
     /** dict data search params */
@@ -392,14 +392,13 @@ declare namespace Api {
     type DictDataOperateParams = CommonType.RecordNullable<
       Pick<
         Api.System.DictData,
-        | 'dictCode'
-        | 'dictSort'
+        | 'id'
+        | 'sortIndex'
         | 'dictLabel'
         | 'dictValue'
         | 'dictType'
         | 'cssClass'
         | 'listClass'
-        | 'isDefault'
         | 'remark'
       >
     >;
@@ -511,7 +510,7 @@ declare namespace Api {
 
     /** config search params */
     type ConfigSearchParams = CommonType.RecordNullable<
-      Pick<Api.System.Config, 'configName' | 'configKey' | 'configType' | 'createTime'> & Api.Common.CommonSearchParams
+      Pick<Api.System.Config, 'configName' | 'configKey' | 'configType' | 'createdTime'> & Api.Common.CommonSearchParams
     >;
 
     /** config operate params */

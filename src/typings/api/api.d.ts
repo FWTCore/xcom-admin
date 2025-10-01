@@ -17,7 +17,7 @@ declare namespace Api {
 
     /** common params of paginating query list data */
     interface PaginatingQueryRecord<T = any> extends PaginatingCommonParams {
-      rows: T[];
+      records: T[];
     }
 
     /** common search params of table */
@@ -25,7 +25,7 @@ declare namespace Api {
       CommonType.RecordNullable<{
         orderByColumn: string;
         isAsc: 'asc' | 'desc';
-        params: { [key: string]: any };
+        param: { [key: string]: any };
       }>;
 
     /**
@@ -54,6 +54,7 @@ declare namespace Api {
 
     /** common record */
     type CommonRecord<T = any> = {
+      id: number;
       /** record creator */
       createdById: number;
       /** record creator */

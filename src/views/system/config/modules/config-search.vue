@@ -80,7 +80,7 @@ async function search() {
                 clearable
               />
             </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:6" label="创建时间" path="createTime" class="pr-24px">
+            <NFormItemGi span="24 s:12 m:6" label="创建时间" path="createdTime" class="pr-24px">
               <NDatePicker
                 v-model:formatted-value="dateRangeCreateTime"
                 type="datetimerange"

@@ -93,7 +93,7 @@ const {
       }
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: $t('page.system.config.createTime'),
       align: 'center',
       minWidth: 120,

@@ -70,8 +70,8 @@ const {
       }
     },
     {
-      key: 'createTime',
-      title: $t('page.system.dept.createTime'),
+      key: 'createdTime',
+      title: $t('page.system.dept.createdTime'),
       align: 'center',
       minWidth: 120
     },

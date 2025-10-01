@@ -106,7 +106,7 @@ const { columns, data, getData, getDataByPage, loading, mobilePagination, search
       }
     },
     {
-      key: 'createTime',
+      key: 'createdTime',
       title: '创建时间',
       align: 'center',
       minWidth: 120
@@ -209,7 +209,7 @@ function reset() {
             <NFormItemGi span="24 s:12 m:8" label="所属部门" path="deptId" class="pr-24px">
               <DeptTreeSelect v-model:value="searchParams.deptId" placeholder="请选择部门" />
             </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:10" label="创建时间" path="createTime" class="pr-24px">
+            <NFormItemGi span="24 s:12 m:10" label="创建时间" path="createdTime" class="pr-24px">
               <NDatePicker
                 ref="datePickerRef"
                 v-model:formatted-value="dateRangeCreateTime"

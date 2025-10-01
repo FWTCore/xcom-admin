@@ -38,7 +38,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     apiParams,
     columns: config.columns,
     transformer: res => {
-      const { rows: records = [], total = 0 } = res.data || {};
+      const { records: records = [], total = 0 } = res.data || {};
 
       const current = searchParams.pageNum as number;
       const size = (searchParams.pageSize || 0) as number;

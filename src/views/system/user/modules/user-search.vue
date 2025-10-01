@@ -79,7 +79,7 @@ async function search() {
             <NFormItemGi
               span="24 s:12 m:12"
               :label="$t('page.system.user.createTime')"
-              path="createTime"
+              path="createdTime"
               class="pr-24px"
             >
               <NDatePicker

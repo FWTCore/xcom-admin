@@ -30,8 +30,8 @@ async function search() {
 
 <template>
   <NCard :bordered="false" size="small" class="card-wrapper">
-    <NCollapse>
-      <NCollapseItem :title="$t('common.search')" name="user-search">
+    <NCollapse :default-expanded-names="['dict-item-search']">
+      <NCollapseItem :title="$t('common.search')" name="dict-item-search">
         <NForm ref="formRef" :model="model" label-placement="left" :label-width="80">
           <NGrid responsive="screen" item-responsive>
             <NFormItemGi
