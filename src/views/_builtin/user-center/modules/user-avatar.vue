@@ -44,6 +44,7 @@ const options = reactive<CropperOptions>({
 
 /** 编辑头像 */
 function handleEdit() {
+  return;
   options.img = imageUrl.value;
   showDrawer();
 }
@@ -107,11 +108,11 @@ function handleClose() {
   <div class="cursor-pointer" @click="handleEdit">
     <div class="relative h-120px w-120px overflow-hidden rounded-full">
       <img :src="imageUrl" alt="user-avatar" class="h-full w-full object-cover" />
-      <div
+      <!-- <div
         class="absolute inset-0 flex-center bg-black/50 text-white opacity-0 transition-opacity duration-300 hover:opacity-100"
       >
         <SvgIcon icon="ep:plus" class="text-24px" />
-      </div>
+      </div> -->
     </div>
 
     <NModal v-model:show="showModal" preset="card" title="修改头像" class="w-400px" @close="handleClose">

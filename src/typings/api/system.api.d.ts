@@ -109,7 +109,7 @@ declare namespace Api {
       /** 手机号码 */
       mobilePhone: string;
       /** 用户性别（0女 1男 2其他） */
-      gender: string;
+      gender: number;
       /** 头像地址 */
       avatar: string;
       /** 密码 */

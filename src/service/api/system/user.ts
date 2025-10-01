@@ -108,8 +108,8 @@ export function fetchAuthUserRole(userId: CommonType.IdType, roleIds: CommonType
 /** 修改用户基本信息 */
 export function fetchUpdateUserProfile(data: Api.System.UserProfileOperateParams) {
   return request<boolean>({
-    url: '/system/user/profile',
-    method: 'put',
+    url: '/infra/system/account/modify/profile',
+    method: 'post',
     data
   });
 }
@@ -117,8 +117,8 @@ export function fetchUpdateUserProfile(data: Api.System.UserProfileOperateParams
 /** 修改用户密码 */
 export function fetchUpdateUserPassword(data: Api.System.UserPasswordOperateParams) {
   return request<boolean>({
-    url: '/system/user/profile/updatePwd',
-    method: 'put',
+    url: '/infra/system/account/modify/password',
+    method: 'post',
     headers: {
       isEncrypt: true
     },

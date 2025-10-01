@@ -55,15 +55,19 @@ declare namespace Api {
     /** common record */
     type CommonRecord<T = any> = {
       /** record creator */
-      createBy: string;
+      createdById: number;
+      /** record creator */
+      createdByName: string;
+      /** record create time */
+      createdTime: string;
+      /** record updater */
+      updatedById: number;
+      /** record creator */
+      updatedByName: string;
+      /** record update time */
+      updatedTime: string;
       /** record dept */
       createDept?: any;
-      /** record create time */
-      createTime: string;
-      /** record updater */
-      updateBy: string;
-      /** record update time */
-      updateTime: string;
     } & T;
 
     type CommonTenantRecord<T = any> = {

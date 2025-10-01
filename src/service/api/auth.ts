@@ -72,7 +72,6 @@ export function fetchLogout() {
     });
   }
   return request({
-    url: '/auth/logout',
-    method: 'post'
+    url: '/infra/system/account/logout'
   });
 }

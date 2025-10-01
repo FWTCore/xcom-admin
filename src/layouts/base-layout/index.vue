@@ -105,8 +105,8 @@ function getSiderCollapsedWidth() {
 
 onMounted(() => {
   const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-  initWebSocket(`${protocol + window.location.host + import.meta.env.VITE_APP_BASE_API}/resource/websocket`);
-  initSSE(`${import.meta.env.VITE_APP_BASE_API}/resource/sse`);
+  // initWebSocket(`${protocol + window.location.host + import.meta.env.VITE_APP_BASE_API}/resource/websocket`);
+  // initSSE(`${import.meta.env.VITE_APP_BASE_API}/resource/sse`);
 });
 </script>
 

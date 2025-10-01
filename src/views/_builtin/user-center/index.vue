@@ -8,6 +8,8 @@ import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import OnlineTable from './modules/online-table.vue';
 import SocialCard from './modules/social-card.vue';
 import UserAvatar from './modules/user-avatar.vue';
+import { MD5 } from '@sa/utils';
+
 defineOptions({
   name: 'UserCenter'
 });
@@ -40,7 +42,7 @@ function createDefaultProfileModel(): ProfileModel {
     nickName: userInfo.user?.nickName || '',
     email: userInfo.user?.email || '',
     mobilePhone: userInfo.user?.mobilePhone || '',
-    gender: userInfo.user?.gender || '0'
+    gender: userInfo.user?.gender ?? 2
   };
 }
 
@@ -91,7 +93,13 @@ async function updatePassword() {
   }
   startBtnLoading();
   const { oldPassword, newPassword } = passwordModel;
-  const { error } = await fetchUpdateUserPassword({ oldPassword, newPassword });
+  const oldPasswordStr = MD5.encrypt(
+    import.meta.env.VITE_REQUEST_SECRET + oldPassword + import.meta.env.VITE_REQUEST_SECRET
+  );
+  const newPasswordStr = MD5.encrypt(
+    import.meta.env.VITE_REQUEST_SECRET + newPassword + import.meta.env.VITE_REQUEST_SECRET
+  );
+  const { error } = await fetchUpdateUserPassword({ oldPassword: oldPasswordStr, newPassword: newPasswordStr });
   if (!error) {
     window.$message?.success('密码修改成功');
     // 清空表单
@@ -118,10 +126,13 @@ async function updatePassword() {
           <NDescriptionsItem label="手机号码">
             <div class="text-14px">{{ userInfo.user?.mobilePhone }}</div>
           </NDescriptionsItem>
-          <NDescriptionsItem label="用户邮箱">
-            <div class="text-14px">{{ userInfo.user?.email }}</div>
+          <NDescriptionsItem label="所属公司">
+            <div class="text-14px">{{ userInfo.user?.companyName }}</div>
           </NDescriptionsItem>
-          <NDescriptionsItem label="所属部门">
+          <!-- <NDescriptionsItem label="用户邮箱">
+            <div class="text-14px">{{ userInfo.user?.email }}</div>
+          </NDescriptionsItem> -->
+          <!-- <NDescriptionsItem label="所属部门">
             <div class="text-14px">{{ userInfo.user?.deptName }}</div>
           </NDescriptionsItem>
           <NDescriptionsItem label="所属角色">
@@ -130,9 +141,9 @@ async function updatePassword() {
                 {{ role.roleName }}
               </NTag>
             </NSpace>
-          </NDescriptionsItem>
+          </NDescriptionsItem> -->
           <NDescriptionsItem label="创建日期">
-            <div class="text-14px">{{ userInfo.user?.createTime }}</div>
+            <div class="text-14px">{{ userInfo.user?.createdTime }}</div>
           </NDescriptionsItem>
         </NDescriptions>
       </div>
@@ -142,27 +153,19 @@ async function updatePassword() {
     <NCard title="基本资料" class="shadow-sm">
       <NTabs type="line" animated class="h-full" s>
         <NTabPane name="userInfo" tab="基本资料">
-          <NForm
-            ref="profileFormRef"
-            :model="profileModel"
-            :rules="profileRules"
-            label-placement="left"
-            label-width="100px"
-            class="mt-16px max-w-520px"
-          >
+          <NForm ref="profileFormRef" :model="profileModel" :rules="profileRules" label-placement="left"
+            label-width="100px" class="mt-16px max-w-520px">
             <NFormItem label="昵称" path="nickName">
               <NInput v-model:value="profileModel.nickName" placeholder="请输入昵称" />
-            </NFormItem>
-            <NFormItem label="邮箱" path="email">
-              <NInput v-model:value="profileModel.email" placeholder="请输入邮箱" />
             </NFormItem>
             <NFormItem label="手机号" path="mobilePhone">
               <NInput v-model:value="profileModel.mobilePhone" placeholder="请输入手机号" />
             </NFormItem>
             <NFormItem label="性别" path="gender">
               <NRadioGroup v-model:value="profileModel.gender">
-                <NRadio value="0">男</NRadio>
-                <NRadio value="1">女</NRadio>
+                <NRadio :value="0">女</NRadio>
+                <NRadio :value="1">男</NRadio>
+                <NRadio :value="2">其他</NRadio>
               </NRadioGroup>
             </NFormItem>
             <NFormItem class="flex items-center justify-end">
@@ -176,37 +179,19 @@ async function updatePassword() {
           </NForm>
         </NTabPane>
         <NTabPane name="updatePwd" tab="修改密码">
-          <NForm
-            ref="passwordFormRef"
-            :model="passwordModel"
-            :rules="passwordRules"
-            label-placement="left"
-            label-width="100px"
-            class="mt-16px max-w-520px"
-          >
+          <NForm ref="passwordFormRef" :model="passwordModel" :rules="passwordRules" label-placement="left"
+            label-width="100px" class="mt-16px max-w-520px">
             <NFormItem label="旧密码" path="oldPassword">
-              <NInput
-                v-model:value="passwordModel.oldPassword"
-                type="password"
-                placeholder="请输入旧密码"
-                show-password-on="click"
-              />
+              <NInput v-model:value="passwordModel.oldPassword" type="password" placeholder="请输入旧密码"
+                show-password-on="click" />
             </NFormItem>
             <NFormItem label="新密码" path="newPassword">
-              <NInput
-                v-model:value="passwordModel.newPassword"
-                type="password"
-                placeholder="请输入新密码"
-                show-password-on="click"
-              />
+              <NInput v-model:value="passwordModel.newPassword" type="password" placeholder="请输入新密码"
+                show-password-on="click" />
             </NFormItem>
             <NFormItem label="确认密码" path="confirmPassword">
-              <NInput
-                v-model:value="passwordModel.confirmPassword"
-                type="password"
-                placeholder="请再次输入新密码"
-                show-password-on="click"
-              />
+              <NInput v-model:value="passwordModel.confirmPassword" type="password" placeholder="请再次输入新密码"
+                show-password-on="click" />
             </NFormItem>
             <NFormItem class="flex items-center justify-end">
               <NButton class="ml-20px w-120px" type="primary" :loading="btnLoading" @click="updatePassword">
@@ -217,14 +202,6 @@ async function updatePassword() {
               </NButton>
             </NFormItem>
           </NForm>
-        </NTabPane>
-        <NTabPane name="social" tab="第三方应用">
-          <SocialCard />
-        </NTabPane>
-        <NTabPane name="online" tab="在线设备">
-          <div class="h-full">
-            <OnlineTable />
-          </div>
         </NTabPane>
       </NTabs>
     </NCard>
